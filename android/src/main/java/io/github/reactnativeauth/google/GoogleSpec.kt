@@ -13,4 +13,6 @@ interface GoogleSpec : TurboModule {
         options: ReadableMap,
         promise: Promise,
     )
+
+    fun signOut(promise: Promise)
 }

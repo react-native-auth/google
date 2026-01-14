@@ -19,4 +19,8 @@ export function legacySignIn(
   return Google.legacySignIn(options);
 }
 
+export function signOut(): Promise<void> {
+  return Google.signOut();
+}
+
 export type { GoogleAuthOptions, GoogleAuthResult };

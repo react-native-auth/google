@@ -18,6 +18,8 @@ export interface Spec extends TurboModule {
   signIn(options: GoogleAuthOptions): Promise<GoogleAuthResult>;
 
   legacySignIn(options: GoogleAuthOptions): Promise<GoogleAuthResult>;
+
+  signOut(): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('Google');

@@ -95,6 +95,40 @@ class GoogleModule(
         activity.startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+    @ReactMethod
+    fun signOut(promise: Promise) {
+        val currentActivity = getCurrentActivity()
+        val activity: Activity =
+            currentActivity
+                ?: return promise.reject(
+                    "NO_ACTIVITY",
+                    "No current Activity",
+                )
+
+        try {
+            val gso =
+                GoogleSignInOptions
+                    .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .build()
+
+            googleSignInClient = GoogleSignIn.getClient(activity, gso)
+
+            googleSignInClient?.signOut()?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    promise.resolve(null)
+                } else {
+                    promise.reject(
+                        "SIGN_OUT_FAILED",
+                        "Sign-out failed",
+                        task.exception,
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            promise.reject("SIGN_OUT_ERROR", e.message, e)
+        }
+    }
+
     override fun onActivityResult(
         activity: Activity,
         requestCode: Int,
