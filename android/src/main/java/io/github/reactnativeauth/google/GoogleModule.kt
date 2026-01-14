@@ -29,6 +29,7 @@ class GoogleModule(
 
     override fun getName(): String = NAME
 
+    @ReactMethod
     fun oneTap(
         options: ReadableMap,
         promise: Promise,
@@ -40,6 +41,7 @@ class GoogleModule(
         )
     }
 
+    @ReactMethod
     fun signIn(
         options: ReadableMap,
         promise: Promise,
@@ -51,6 +53,7 @@ class GoogleModule(
         )
     }
 
+    @ReactMethod
     fun legacySignIn(
         options: ReadableMap,
         promise: Promise,
