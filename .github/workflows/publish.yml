@@ -1,0 +1,101 @@
+name: Publish to NPM (OIDC)
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: |
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write   # ⭐ OIDC 필수
+      pull-requests: read
+
+    steps:
+      # ----------------------------------------------------
+      # Checkout
+      # ----------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # ----------------------------------------------------
+      # Parse release metadata from PR body
+      # ----------------------------------------------------
+      - name: Parse release metadata
+        id: meta
+        shell: bash
+        run: |
+          BODY="${{ github.event.pull_request.body }}"
+
+          draft=$(echo "$BODY" | sed -n 's/.*draft=\(.*\)/\1/p')
+          prerelease=$(echo "$BODY" | sed -n 's/.*prerelease=\(.*\)/\1/p')
+          npm_tag=$(echo "$BODY" | sed -n 's/.*npm-tag=\(.*\)/\1/p')
+          title=$(echo "$BODY" | sed -n 's/.*release-title=\(.*\)/\1/p')
+
+          echo "draft=${draft:-false}" >> "$GITHUB_OUTPUT"
+          echo "prerelease=${prerelease:-false}" >> "$GITHUB_OUTPUT"
+          echo "npm_tag=${npm_tag:-latest}" >> "$GITHUB_OUTPUT"
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+
+          echo "notes<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$BODY" | sed '1,/## 🚀 Release Notes/d'
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      # ----------------------------------------------------
+      # Get version
+      # ----------------------------------------------------
+      - name: Get version
+        id: package
+        run: |
+          echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      # ----------------------------------------------------
+      # Create GitHub Release
+      # ----------------------------------------------------
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.package.outputs.version }}
+          release_name: ${{ steps.meta.outputs.title != '' && steps.meta.outputs.title || format('Release v{0}', steps.package.outputs.version) }}
+          body: ${{ steps.meta.outputs.notes }}
+          draft: ${{ steps.meta.outputs.draft }}
+          prerelease: ${{ steps.meta.outputs.prerelease }}
+
+      # ----------------------------------------------------
+      # Setup Node.js (OIDC)
+      # ----------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org/
+          always-auth: true
+          scope: '@react-native-auth'
+
+      # ----------------------------------------------------
+      # Install dependencies
+      # ----------------------------------------------------
+      - name: Install dependencies
+        run: npm ci
+
+      # ----------------------------------------------------
+      # Publish to NPM (OIDC)
+      # ----------------------------------------------------
+      - name: Publish to NPM (OIDC)
+        run: |
+          npm publish --access public --tag ${{ steps.meta.outputs.npm_tag }} --provenance

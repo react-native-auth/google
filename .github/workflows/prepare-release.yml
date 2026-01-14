@@ -1,0 +1,117 @@
+name: Prepare Release (Create PR)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-type:
+        description: 'Version type (major, minor, patch)'
+        required: true
+        default: patch
+
+      npm-tag:
+        description: 'NPM dist-tag (latest, beta, next)'
+        required: true
+        default: latest
+
+      release-title:
+        description: 'GitHub Release title (optional)'
+        required: false
+        default: ''
+
+      draft:
+        description: 'GitHub Release draft (true / false)'
+        required: true
+        default: 'false'
+
+      prerelease:
+        description: 'GitHub Release prerelease (true / false)'
+        required: true
+        default: 'false'
+
+      release-notes:
+        description: 'GitHub Release notes (Markdown)'
+        required: false
+        default: ''
+
+concurrency:
+  group: release-pr
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # ----------------------------------------------------
+      # Checkout
+      # ----------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # ----------------------------------------------------
+      # Setup (custom action)
+      # ----------------------------------------------------
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      # ----------------------------------------------------
+      # Install dependencies
+      # ----------------------------------------------------
+      - name: Install dependencies
+        run: npm ci
+
+      # ----------------------------------------------------
+      # Configure git
+      # ----------------------------------------------------
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # ----------------------------------------------------
+      # Build / prepare
+      # ----------------------------------------------------
+      - name: Build
+        run: npm run prepare
+
+      # ----------------------------------------------------
+      # Version bump (no tag)
+      # ----------------------------------------------------
+      - name: Update version
+        run: npm version ${{ inputs.version-type }} --no-git-tag-version
+
+      # ----------------------------------------------------
+      # Get version
+      # ----------------------------------------------------
+      - name: Get version
+        id: package
+        run: |
+          echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      # ----------------------------------------------------
+      # Create Release Pull Request
+      # ----------------------------------------------------
+      - name: Create Release Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: release/${{ steps.package.outputs.version }}
+          base: main
+          commit-message: 'chore: release v${{ steps.package.outputs.version }}'
+          title: ${{ inputs.release-title != '' && inputs.release-title || format('Release v{0}', steps.package.outputs.version) }}
+          body: |
+            <!-- release-meta
+            draft=${{ inputs.draft }}
+            prerelease=${{ inputs.prerelease }}
+            npm-tag=${{ inputs.npm-tag }}
+            release-title=${{ inputs.release-title }}
+            -->
+
+            ## 🚀 Release Notes
+
+            ${{ inputs.release-notes }}
