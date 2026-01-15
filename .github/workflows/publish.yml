@@ -2,48 +2,32 @@ name: Publish to NPM (OIDC Trusted Publishing)
 
 on:
   release:
-    types: [published]   # ✅ GitHub Release 시 자동 배포
+    types: [published]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-
     environment: npm-publish
 
     permissions:
       contents: read
-      id-token: write     # 🔑 OIDC 필수
-
+      id-token: write   
+      
     steps:
-      # ----------------------------------------------------
-      # Checkout
-      # ----------------------------------------------------
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
 
-      # ----------------------------------------------------
-      # Setup Node.js (OIDC only)
-      # ----------------------------------------------------
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org/
 
-      # ----------------------------------------------------
-      # Install dependencies
-      # ----------------------------------------------------
+      - name: Clear npm auth
+        run: |
+          rm -f ~/.npmrc
+          npm config delete //registry.npmjs.org/:_authToken || true
+
       - name: Install dependencies
         run: npm ci
 
-      # ----------------------------------------------------
-      # Build (prepare / bob build 자동 실행됨)
-      # ----------------------------------------------------
-      - name: Build
-        run: npm run build --if-present
-
-      # ----------------------------------------------------
-      # Publish to NPM (Trusted Publishing)
-      # ----------------------------------------------------
-      - name: Publish to NPM
+      - name: Publish to NPM (OIDC)
         run: npm publish --access public --provenance
