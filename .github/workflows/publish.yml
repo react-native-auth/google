@@ -1,4 +1,4 @@
-name: Publish to NPM (OIDC Trusted Publishing)
+name: Publish to NPM (Trusted Publishing)
 
 on:
   release:
@@ -7,27 +7,37 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     environment: npm-publish
 
     permissions:
       contents: read
-      id-token: write   
-      
-    steps:
-      - uses: actions/checkout@v5
+      id-token: write 
 
+    steps:
+      # ----------------------------------------------------
+      # Checkout
+      # ----------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # ----------------------------------------------------
+      # Setup Node.js 
+      # ----------------------------------------------------
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          registry-url: https://registry.npmjs.org/
 
-      - name: Clear npm auth
-        run: |
-          rm -f ~/.npmrc
-          npm config delete //registry.npmjs.org/:_authToken || true
-
+      # ----------------------------------------------------
+      # Install
+      # ----------------------------------------------------
       - name: Install dependencies
         run: npm ci
 
-      - name: Publish to NPM (OIDC)
+      # ----------------------------------------------------
+      # Publish (OIDC + provenance)
+      # ----------------------------------------------------
+      - name: Publish to NPM
         run: npm publish --access public --provenance
