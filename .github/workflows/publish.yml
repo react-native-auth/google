@@ -9,45 +9,30 @@ jobs:
 
     permissions:
       contents: write
-      id-token: write
+      id-token: write 
 
     steps:
       # ----------------------------------------------------
       # Checkout
       # ----------------------------------------------------
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       # ----------------------------------------------------
-      # Get version
-      # ----------------------------------------------------
-      - name: Get version
-        id: package
-        run: |
-          echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
-
-      # ----------------------------------------------------
       # Setup Node.js (OIDC)
       # ----------------------------------------------------
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org/
-          always-auth: true
-          scope: '@react-native-auth'
 
       # ----------------------------------------------------
       # Install dependencies
       # ----------------------------------------------------
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
       # ----------------------------------------------------
-      # Publish to NPM (OIDC)
+      # Publish to NPM (Trusted Publishing)
       # ----------------------------------------------------
-      - name: Publish to NPM (OIDC)
-        run: |
-          npm publish --access public --provenance --verbose
+      - run: npm publish --access public --provenance
