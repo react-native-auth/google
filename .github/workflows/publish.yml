@@ -50,4 +50,4 @@ jobs:
       # ----------------------------------------------------
       - name: Publish to NPM (OIDC)
         run: |
-          npm publish --access public --provenance
+          npm publish --access public --provenance --verbose
