@@ -14,5 +14,10 @@ interface GoogleSpec : TurboModule {
         promise: Promise,
     )
 
+    fun legacySignIn(
+        options: ReadableMap,
+        promise: Promise,
+    )
+
     fun signOut(promise: Promise)
 }

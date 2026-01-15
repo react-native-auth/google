@@ -81,12 +81,18 @@ class GoogleModule(
             return
         }
 
-        val gso =
+        val builder =
             GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(clientId)
                 .requestEmail()
-                .build()
+
+        val prompt = options.getString("prompt")
+        if (!prompt.isNullOrEmpty()) {
+            builder.requestProfile()
+        }
+
+        val gso = builder.build()
 
         googleSignInClient = GoogleSignIn.getClient(activity, gso)
         legacySignInPromise = promise
