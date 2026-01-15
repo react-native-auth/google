@@ -66,6 +66,7 @@
 | `oneTap()`       | One Tap / Credential Manager | Quick sign-in for returning users         |
 | `signIn()`       | Account Chooser UI           | First-time sign-in, account selection     |
 | `legacySignIn()` | Legacy OAuth with scopes     | Advanced features (Drive, Calendar, etc.) |
+| `signOut()`      | Sign out current user        | Logout, clear session                     |
 
 ---
 
@@ -165,7 +166,7 @@ For authentication (**USE THIS IN YOUR CODE**)
 ### 📥 Import
 
 ```typescript
-import { oneTap, signIn, legacySignIn } from '@react-native-auth/google';
+import { oneTap, signIn, legacySignIn, signOut } from '@react-native-auth/google';
 ````
 
 ### 🎯 One Tap Sign-In
@@ -206,6 +207,19 @@ const result = await legacySignIn({
     'https://www.googleapis.com/auth/calendar.readonly',
   ],
 });
+```
+
+### 🚪 Sign Out
+
+Sign out the current user and clear the session.
+
+```typescript
+try {
+  await signOut();
+  console.log('✅ Signed out successfully');
+} catch (error) {
+  console.error('❌ Sign-out failed:', error);
+}
 ```
 
 ---

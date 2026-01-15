@@ -3,7 +3,6 @@ import { TurboModuleRegistry } from 'react-native';
 
 export type GoogleAuthOptions = {
   clientId: string;
-  webClientId?: string;
   scopes?: string[];
 };
 

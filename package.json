@@ -1,7 +1,7 @@
 {
   "name": "@react-native-auth/google",
-  "version": "0.0.3",
-  "description": "react-native google credential manager",
+  "version": "0.0.4",
+  "description": "Modern Google Authentication for React Native",
   "main": "lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
   "exports": {
@@ -42,8 +42,16 @@
   },
   "keywords": [
     "react-native",
-    "ios",
-    "android"
+    "google",
+    "android",
+    "authentication",
+    "login",
+    "google-login",
+    "google-api",
+    "react-native-app",
+    "google-authentication",
+    "react-native-authentication",
+    "google-one-tap"
   ],
   "repository": {
     "type": "git",
