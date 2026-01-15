@@ -46,6 +46,20 @@ jobs:
         run: npm ci
 
       # ----------------------------------------------------
+      # Login to NPM
+      # ----------------------------------------------------
+      - name: Login to NPM
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      # ----------------------------------------------------
+      # Authenticate with NPM using OIDC
+      # ----------------------------------------------------
+      - name: Authenticate with NPM
+        run: |
+          echo "Configuring NPM for OIDC authentication..."
+          npm exec --yes @npmcli/trusted-publishers login
+
+      # ----------------------------------------------------
       # Publish to NPM (OIDC)
       # ----------------------------------------------------
       - name: Publish to NPM (OIDC)
