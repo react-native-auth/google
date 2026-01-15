@@ -1,23 +1,30 @@
 name: Publish to NPM (OIDC)
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'v*' 
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
-      id-token: write
+      contents: write     
+      id-token: write    
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org/
 
-      - run: npm ci
-      - run: npm publish --access public --provenance
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish to NPM
+        run: npm publish --access public --provenance
