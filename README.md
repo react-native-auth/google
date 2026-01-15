@@ -206,6 +206,47 @@ const result = await legacySignIn({
     'https://www.googleapis.com/auth/drive.readonly',
     'https://www.googleapis.com/auth/calendar.readonly',
   ],
+  prompt: 'consent', // Optional: Force consent screen
+});
+```
+
+#### 📍 `prompt` Parameter
+
+Controls the authentication flow behavior:
+
+| Value            | Behavior                                           |
+| ---------------- | -------------------------------------------------- |
+| `undefined`      | Default behavior - no forced interaction          |
+| `'consent'`      | Always show consent screen, even for existing app |
+| `'login'`        | Always show login screen, force account selection |
+| `'select_account'` | Always show account selection screen             |
+| `'none'`         | Silent authentication (may fail if no session)    |
+
+**Example - Force Consent Screen:**
+
+```typescript
+const result = await legacySignIn({
+  clientId: CLIENT_ID,
+  scopes: ['https://www.googleapis.com/auth/calendar'],
+  prompt: 'consent', // Useful when updating permissions
+});
+```
+
+**Example - Force Account Selection:**
+
+```typescript
+const result = await legacySignIn({
+  clientId: CLIENT_ID,
+  prompt: 'select_account', // Always show account picker
+});
+```
+
+**Example - Force Login:**
+
+```typescript
+const result = await legacySignIn({
+  clientId: CLIENT_ID,
+  prompt: 'login', // Useful for switching accounts
 });
 ```
 
@@ -232,6 +273,7 @@ try {
 type GoogleAuthOptions = {
   clientId: string; // Your Web Client ID
   scopes?: string[]; // OAuth scopes (legacySignIn only)
+  prompt?: string; // Consent behavior: 'consent', 'login', 'none'
 };
 
 type GoogleAuthResult = {
