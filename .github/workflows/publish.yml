@@ -25,9 +25,9 @@ jobs:
       # Setup Node.js 
       # ----------------------------------------------------
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org/
 
       # ----------------------------------------------------
@@ -49,5 +49,6 @@ jobs:
       # ----------------------------------------------------
       - name: Publish to NPM
         run: |
-          unset NODE_AUTH_TOKEN NPM_TOKEN
           npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
