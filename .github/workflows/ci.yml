@@ -72,7 +72,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Cache turborepo for Android
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v5.0.3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
           key: ${{ runner.os }}-turborepo-android-${{ hashFiles('package-lock.json') }}
@@ -102,7 +102,7 @@ jobs:
 
       - name: Cache Gradle
         if: env.turbo_cache_hit != 1
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v5.0.3
         with:
           path: |
             ~/.gradle/wrapper
@@ -135,7 +135,7 @@ jobs:
   #       uses: ./.github/actions/setup
 
   #     - name: Cache turborepo for iOS
-  #       uses: actions/cache@v4.2.3
+  #       uses: actions/cache@v5.0.3
   #       with:
   #         path: ${{ env.TURBO_CACHE_DIR }}
   #         key: ${{ runner.os }}-turborepo-ios-${{ hashFiles('yarn.lock') }}
