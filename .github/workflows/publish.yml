@@ -37,7 +37,17 @@ jobs:
         run: npm ci
 
       # ----------------------------------------------------
+      # Diagnostics
+      # ----------------------------------------------------
+      - name: Versions
+        run: |
+          node --version
+          npm --version
+
+      # ----------------------------------------------------
       # Publish (OIDC + provenance)
       # ----------------------------------------------------
       - name: Publish to NPM
-        run: npm publish --access public --provenance
+        run: |
+          unset NODE_AUTH_TOKEN NPM_TOKEN
+          npm publish --access public --provenance
