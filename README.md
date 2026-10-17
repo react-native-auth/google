@@ -1,2 +1,2 @@
 > [!IMPORTANT]
-> 📢 New Status Updates: See [#2](../../issues/2)
+> 📢 New Status Updates: See [#2](../../issues/2#issue-5898099679)
