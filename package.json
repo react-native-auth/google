@@ -1,6 +1,6 @@
 {
   "name": "@react-native-auth/google",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "Modern React Native Authecation Library For Google OAuth2",
   "main": "./lib/module/GoogleAuth.js",
   "types": "./lib/typescript/src/GoogleAuth.d.ts",
