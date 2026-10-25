@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="https://avatars.githubusercontent.com/u/254466332" alt="react-native-auth logo" height="120">
+<img src="https://github.com/react-native-auth.png" alt="react-native-auth logo" height="120">
 
-# 🔐 @react-native-auth/google
+# @react-native-auth/google
 
 **Modern Google Authentication for React Native**
 
@@ -10,27 +10,27 @@
 [![License: MIT](https://img.shields.io/github/license/react-native-auth/google?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 [![Platform: Android](https://img.shields.io/badge/Platform-Android-green.svg?style=for-the-badge&logo=android)](https://developer.android.com/)
 
-[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/react-native-auth/google?style=for-the-badge&logo=github)](../../issues)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/react-native-auth/google?style=for-the-badge&logo=github)
+[![GitHub Issues](https://img.shields.io/github/issues/react-native-auth/google?style=for-the-badge&logo=github)](https://github.com/react-native-auth/google/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/react-native-auth/google?style=for-the-badge&logo=github)](https://github.com/react-native-auth/google/pulls)
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#-features)
 - [📦 Installation](#-installation)
 - [⚙️ Setup](#️-setup)
-  - [📱 Step 1: Enable New Architecture](#-step-1-enable-new-architecture)
-  - [☁️ Step 2: Google Cloud Console Setup](#️-step-2-google-cloud-console-setup)
-- [🚀 Usage](#-usage)
-  - [🎯 One Tap Sign-In](#-one-tap-sign-in)
-  - [👤 Sign-In with Account Chooser](#-sign-in-with-account-chooser)
-  - [🔐 Legacy OAuth Sign-In](#-legacy-oauth-sign-in)
-- [📝 API Reference](#-api-reference)
-- [🛠️ Troubleshooting](#️-troubleshooting)
-- [📄 License](#-license)
+  - [Step 1: Enable New Architecture](#step-1-enable-new-architecture)
+  - [Step 2: Google Cloud Console Setup](#️step-2-google-cloud-console-setup)
+- [Usage](#usage)
+  - [One Tap Sign-In](#one-tap-sign-in)
+  - [Sign-In with Account Chooser](#sign-in-with-account-chooser)
+  - [Legacy OAuth Sign-In](#legacy-oauth-sign-in)
+- [API Reference](#-api-reference)
+- [Troubleshooting](#️-troubleshooting)
+- [License](#license)
 
 ---
 
@@ -84,7 +84,7 @@ yarn add @react-native-auth/google
 
 ## ⚙️ Setup
 
-### 📱 Step 1: Enable New Architecture
+### Step 1: Enable New Architecture
 
 <details>
 <summary>Show details</summary>
@@ -100,28 +100,28 @@ kotlin.version=2.1.20
 
 </details>
 
-### ☁️ Step 2: Google Cloud Console Setup
+### Step 2: Google Cloud Console Setup
 
 <details>
 <summary>Show details</summary>
 
 <br>
 
-### 🌐 Access Console
+### Access Console
 
 Go to [**Google Cloud Console**](https://console.cloud.google.com/) and create/select your project.
 
-### 🔌 Enable API
+### Enable API
 
 1. Navigate to **APIs & Services** → **Library**
 2. Search for **"Google Sign-In API"** or **"Google Identity"**
 3. Click **Enable**
 
-### 🔑 Create OAuth 2.0 Credentials
+### Create OAuth 2.0 Credentials
 
 You need **TWO** client IDs:
 
-#### a) 📱 Android Client ID
+#### a) Android Client ID
 
 For app verification (SHA-1 fingerprint required)
 
@@ -143,7 +143,7 @@ For app verification (SHA-1 fingerprint required)
 
 5. Click **Create**
 
-#### b) 🌐 Web Client ID
+#### b) Web Client ID
 
 For authentication (**USE THIS IN YOUR CODE**)
 
@@ -155,15 +155,15 @@ For authentication (**USE THIS IN YOUR CODE**)
 4. Click **Create**
 5. **Copy the Web Client ID** → `xxxxx.apps.googleusercontent.com`
 
-> **💡 Pro Tip**: The Android Client ID verifies your app. The Web Client ID is used for authentication.
+> **Pro Tip**: The Android Client ID verifies your app. The Web Client ID is used for authentication.
 
 </details>
 
 ---
 
-## 🚀 Usage
+## Usage
 
-### 📥 Import
+### Import
 
 ```typescript
 import {
@@ -174,7 +174,7 @@ import {
 } from "@react-native-auth/google";
 ```
 
-### 🎯 One Tap Sign-In
+### One Tap Sign-In
 
 Quick authentication for returning users with saved credentials.
 
@@ -190,7 +190,7 @@ try {
 }
 ```
 
-### 👤 Sign-In with Account Chooser
+### Sign-In with Account Chooser
 
 Display account picker UI for first-time users or account switching.
 
@@ -200,7 +200,7 @@ const result = await signIn({
 });
 ```
 
-### 🔐 Legacy OAuth Sign-In
+### Legacy OAuth Sign-In
 
 Advanced authentication with custom OAuth scopes (Drive, Calendar, etc.)
 
@@ -215,7 +215,7 @@ const result = await legacySignIn({
 });
 ```
 
-#### 📍 `prompt` Parameter
+#### `prompt` Parameter
 
 Controls the authentication flow behavior:
 
@@ -255,7 +255,7 @@ const result = await legacySignIn({
 });
 ```
 
-### 🚪 Sign Out
+### Sign Out
 
 Sign out the current user and clear the session.
 
@@ -310,9 +310,9 @@ type GoogleGoogleAuthResult = {
 
 ---
 
-## 📄 License
+## License
 
-[![License: MIT](https://img.shields.io/github/license/react-native-auth/google?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](../..)
+[![License: MIT](https://img.shields.io/github/license/react-native-auth/google?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://github.com/react-native-auth/google#-license)
 
 ---
 
@@ -320,6 +320,6 @@ type GoogleGoogleAuthResult = {
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob) For Everyone
 
-[Report Bug](../../issues) · [Request Feature](../../issues)
+[Report Bug](https://github.com/react-native-auth/google/issues) · [Request Feature](https://github.com/react-native-auth/google/issues)
 
 </div>
