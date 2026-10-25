@@ -36,7 +36,7 @@
     "clean": "del-cli android/build example/android/build example/android/.kotlin example/android/app/.cxx example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "typecheck": "tsc",
-    "release": "release-it --only-version"
+    "release": "release-it"
   },
   "keywords": [
     "react-native",
