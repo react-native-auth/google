@@ -35,8 +35,7 @@
     "example": "yarn workspace @react-native-auth/google-example",
     "clean": "del-cli android/build example/android/build example/android/.kotlin example/android/app/.cxx example/android/app/build example/ios/build lib",
     "prepare": "bob build",
-    "typecheck": "tsc",
-    "release": "release-it"
+    "typecheck": "tsc"
   },
   "keywords": [
     "react-native",
@@ -59,14 +58,12 @@
   },
   "devDependencies": {
     "@react-native/babel-preset": "0.86.2",
-    "@release-it/conventional-changelog": "^12.0.0",
     "@types/react": "^19.2.0",
     "del-cli": "^7.0.0",
     "prettier": "^3.9.10",
     "react": "19.2.3",
     "react-native": "0.86.2",
     "react-native-builder-bob": "^0.43.1",
-    "release-it": "^21.0.1",
     "turbo": "^2.10.8",
     "typescript": "^6.0.3"
   },
@@ -104,31 +101,10 @@
       "javaPackageName": "io.github.react_native_auth.google"
     }
   },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "angular"
-        }
-      }
-    }
-  },
   "create-react-native-library": {
     "type": "turbo-module",
     "languages": "kotlin-objc",
-    "tools": [
-      "release-it"
-    ],
+    "tools": [],
     "version": "0.63.1"
   }
 }
