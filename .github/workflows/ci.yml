@@ -1,0 +1,140 @@
+name: Build Test App
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-lib:
+    name: Build Library
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build Library
+        run: yarn prepare
+
+      - name: Upload built library
+        uses: actions/upload-artifact@v7
+        with:
+          name: library
+          path: lib/
+          retention-days: 1
+
+  build-android:
+    name: Build Android Example
+    needs: build-lib
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          cache: 'yarn'
+          
+      - name: Setup Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download built library
+        uses: actions/download-artifact@v8
+        with:
+          name: library
+          path: lib/
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x example/android/gradlew
+
+      - name: Build Debug APK with Profile Report
+        working-directory: example/android
+        run: ./gradlew assembleDebug --profile
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: app-debug-apk
+          path: example/android/app/build/outputs/apk/debug/*.apk
+          retention-days: 7
+
+      - name: Upload Build Reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: debug-reports
+          path: |
+            example/android/build/reports/
+            example/android/app/build/reports/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # build-ios:
+  #   name: Build iOS Example
+  #   needs: build-lib
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20'
+  #         cache: 'yarn'
+  #
+  #     - name: Setup Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: '3.2'
+  #         bundler-cache: true
+  #
+  #     - name: Install dependencies
+  #       run: yarn install --frozen-lockfile
+  #
+  #     - name: Download built library
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: built-library
+  #         path: lib/
+  #
+  #     - name: Cache CocoaPods
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: example/ios/Pods
+  #         key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-pods-
+  #
+  #     - name: Install CocoaPods
+  #       working-directory: example/ios
+  #       run: pod install
+  #
+  #     - name: Build iOS
+  #       run: yarn example build:ios
