@@ -2454,7 +2454,7 @@ __metadata:
     react-native-svg: "npm:15.13.0"
     react-native-worklets: "npm:^0.13.0"
     react-stately: "npm:3.39.0"
-    tailwind-variants: "npm:0.1.20"
+    tailwind-variants: "npm:4.0.2"
     tailwindcss: "npm:3.4.17"
   languageName: unknown
   linkType: soft
@@ -8067,6 +8067,13 @@ __metadata:
   peerDependencies:
     tailwindcss: "*"
   checksum: 10c0/70fedecb635c5aa8109acb9e4d5608d37d5df82d9c9c091f6b9b2d3b7ddf5f6ca1902e3443b30a367352795d49aa5da73f47e49cc0f3c69108425df8fd95039c
+  languageName: node
+  linkType: hard
+
+"tailwind-variants@npm:4.0.2":
+  version: 4.0.2
+  resolution: "tailwind-variants@npm:4.0.2"
+  checksum: 10c0/b95f2eeb41f1bc8a44f5b0de7c2db56028d3065a2d756d8d6ec1fc5f235bbad4d291a5d0521e18156492198489cec144c9f7c073ed8d9af6d30b4d0f32032111
   languageName: node
   linkType: hard
 
