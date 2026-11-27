@@ -2,5 +2,101 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "3 days",
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "GitHub Actions",
+      "addLabels": [
+        "ci",
+        "github-actions"
+      ]
+    },
+    {
+      "description": "Group Gradle and Gradle Wrapper updates",
+      "matchManagers": [
+        "gradle",
+        "gradle-wrapper"
+      ],
+      "groupName": "Android & Gradle",
+      "addLabels": [
+        "android"
+      ]
+    },
+    {
+      "description": "Group iOS CocoaPods and Ruby Bundler updates",
+      "matchManagers": [
+        "cocoapods",
+        "bundler"
+      ],
+      "groupName": "iOS & Ruby",
+      "addLabels": [
+        "ios"
+      ]
+    },
+    {
+      "description": "Label all npm updates",
+      "matchManagers": [
+        "npm"
+      ],
+      "addLabels": [
+        "javascript"
+      ]
+    },
+    {
+      "description": "Group non-major updates in the example app",
+      "matchFileNames": [
+        "example/**"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "example app (non-major)",
+      "addLabels": [
+        "example"
+      ]
+    },
+    {
+      "description": "Group root devDependencies non-major updates",
+      "matchFileNames": [
+        "package.json"
+      ],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "root devDependencies (non-major)",
+      "addLabels": [
+        "dev-dependencies"
+      ]
+    },
+    {
+      "description": "Highlight major updates for manual review",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "addLabels": [
+        "major-update"
+      ]
+    },
+    {
+      "description": "Disable automated .nvmrc bumps to avoid unexpected CI Node changes",
+      "matchManagers": [
+        "nvm"
+      ],
+      "enabled": false
+    }
   ]
 }
